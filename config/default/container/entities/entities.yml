@@ -1,0 +1,48 @@
+services:
+    markdown.engine:
+        class: Aptoma\Twig\Extension\MarkdownEngine\MichelfMarkdownEngine
+    twig.markdown:
+        class: Aptoma\Twig\Extension\MarkdownExtension
+        arguments: ['@markdown.engine']
+        tags:
+            - { name: twig.extension }
+
+    doctrine:
+        synthetic: true
+
+    efw.decorator:
+        class: phpbb\efw\decorator\abstract_decorator
+        abstract: true
+        arguments:
+            - '@controller.helper'
+            - '@text_formatter.renderer'
+            - '@text_formatter.utils'
+            - '@user'
+
+    efw.entity:
+        class: phpbb\efw\entity\entity
+
+    efw.repository:
+        class: phpbb\efw\repository\abstract_repository
+        abstract: true
+        arguments:
+            - '@doctrine'
+            - '%entities%'
+            - '%tables%'
+
+    efw.provider:
+        class: phpbb\efw\provider
+        public: true
+        arguments:
+            - '@efw.decorator_collection'
+            - '@efw.repository_collection'
+
+    efw.decorator_collection:
+        class: phpbb\di\service_collection
+        arguments: ['@service_container']
+        tags: [{ name: service_collection, tag: efw.decorator }]
+
+    efw.repository_collection:
+        class: phpbb\di\service_collection
+        arguments: ['@service_container']
+        tags: [{ name: service_collection, tag: efw.repository }]

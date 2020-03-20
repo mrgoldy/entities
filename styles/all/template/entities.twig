@@ -1,0 +1,108 @@
+{% include 'overall_header.html' %}
+
+<h2>Entities</h2>
+
+<div class="content">
+	{% markdown %}
+		### Entity
+		<fieldset class="fields1">
+			<dl>
+				<dt><strong>Class:</strong></dt>
+				<dd><code>phpbb\entity\entity\base</code></dd>
+
+				<dt><strong>Function:</strong></dt>
+				<dd>Handles entity data.</dd>
+			</dl>
+		</fieldset>
+
+		### Repository
+		<fieldset class="fields1">
+			<dl>
+				<dt><strong>Class:</strong></dt>
+				<dd><code>phpbb\entity\repository\base</code></dd>
+
+				<dt><strong>Function:</strong></dt>
+				<dd>Handles entity collections.</dd>
+			</dl>
+		</fieldset>
+
+		### Decorator
+		<fieldset class="fields1">
+			<dl>
+				<dt><strong>Class:</strong></dt>
+				<dd><code>phpbb\entity\decorator\base</code></dd>
+
+				<dt><strong>Function:</strong></dt>
+				<dd>Handles outputting and normalizing entity data.</dd>
+			</dl>
+		</fieldset>
+
+		### Provider
+		<fieldset class="fields1">
+			<dl>
+				<dt><strong>Class:</strong></dt>
+				<dd><code>phpbb\entity\provider</code></dd>
+
+				<dt><strong>Function:</strong></dt>
+				<dd>Handles decorators and repositories.</dd>
+			</dl>
+		</fieldset>
+
+		### Structure
+		```
+		phpbb
+		├─ entity
+		│   ├─ exception
+		│   │   ├─ entity_exists_exception
+		│   │   ├─ entity_missing_exception
+		│   │   └─ entity_not_found_exception
+		│   ├─ base
+		│   ├─ base_interface
+		│   ├─ manager
+		│   └─ manager_interface
+		├─ forum
+		│   ├─ controller
+		│   │   ├─ forum
+		│   │   └─ forum_interface
+		│   ├─ entity
+		│   │   ├─ forum
+		│   │   └─ forum_interface
+		│   └─ manager
+		│       ├─ forum
+		│       └─ forum_interface
+		├─ post
+		│   ├─ controller
+		│   │   ├─ post
+		│   │   └─ post_interface
+		│   ├─ entity
+		│   │   ├─ post
+		│   │   └─ post_interface
+		│   └─ manager
+		│       ├─ post
+		│       └─ post_interface
+		├─ topic
+		│   ├─ controller
+		│   │   ├─ topic
+		│   │   └─ topic_interface
+		│   ├─ entity
+		│   │   ├─ topic
+		│   │   └─ topic_interface
+		│   └─ manager
+		│       ├─ topic
+		│       └─ topic_interface
+		└─ user
+		├─ controller
+		│   ├─ user
+		│   └─ user_interface
+		├─ entity
+		│   ├─ user
+		│   └─ user_interface
+		└─ manager
+		├─ user
+		└─ user_interface
+		```
+
+	{% endmarkdown %}
+</div>
+
+{% include 'overall_footer.html' %}

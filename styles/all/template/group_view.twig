@@ -1,0 +1,88 @@
+{% include 'overall_header.html' %}
+
+<script src="https://code.iconify.design/1/1.0.4/iconify.min.js"></script>
+
+<h2>{{ GROUP_NAME_NO_PROFILE }}</h2>
+
+<div class="panel bg1">
+	<div class="inner">
+		<div class="column1">
+			{% if GROUP_DESC %}<p>{{ GROUP_DESC }}</p>{% endif %}
+			<p>
+				{% set type = S_GROUP_CLOSED ? 'CLOSED' : '' %}
+				{% set type = S_GROUP_FREE ? 'FREE' : type %}
+				{% set type = S_GROUP_HIDDEN ? 'HIDDEN' : type %}
+				{% set type = S_GROUP_OPEN ? 'OPEN' : type %}
+				{% set type = S_GROUP_SPECIAL ? 'SPECIAL' : type %}
+				{{ lang('GROUP_IS_' ~ type) }}
+			</p>
+		</div>
+
+		<div class="column2" style="text-align: center;">
+			<div class="profile-avatar">{{ GROUP_AVATAR }}</div>
+			<div>{{ GROUP_RANK_TITLE }}</div>
+			<div>{{ GROUP_RANK }}</div>
+		</div>
+	</div>
+</div>
+
+<div class="action-bar">
+	{% if S_MANAGE_GROUP %}
+		<a class="button" href="{{ U_MANAGE_GROUP }}">
+			<span class="icon fa-fw iconify" data-icon="fa-solid:users-cog" data-inline="true"></span>
+			<span>{{ lang('MANAGE_GROUP') }}</span>
+		</a>
+	{% endif %}
+
+	<div class="pagination">
+		{{ TOTAL_USERS }}
+		{{ pagination ? include('pagination.html') : '&bull; ' ~ PAGE_NUMBER }}
+	</div>
+</div>
+
+{% set leader = false %}
+
+{% for user in users %}
+	{% if loop.first %}
+		<div class="forumbg forumbg-table">
+			<div class="inner">
+				<table class="table1 memberlist">
+					<thead>
+						<tr>
+							<th>{{ lang('USERNAME') }} | {{ lang('GROUP_LEADER') }}</th>
+							<th>{{ lang('POSTS') }}</th>
+							<th>{{ lang('JOINED') }}</th>
+							<th>{{ lang('LAST_ACTIVE') }}</th>
+						</tr>
+					</thead>
+					<tbody>
+	{% endif %}
+
+	<tr class="bg1">
+		<td class="name">
+			{{ user.USERNAME_FULL }}
+			{% if user.S_GROUP_LEADER %}
+				<span class="iconify icon icon-md icon-orange" data-icon="fa-solid:crown" data-inline="false" title="{{ lang('GROUP_LEADER') }}"></span>
+			{% endif %}
+		</td>
+		<td class="posts">{{ user.USER_POSTS }}</td>
+		<td class="joined">{{ user.USER_REG_DATE }}</td>
+		<td class="active">{{ user.USER_LAST_VISIT ?: '-' }}</td>
+	</tr>
+
+	{% if loop.last %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	{% endif %}
+{% endfor %}
+
+<div class="action-bar bar-bottom">
+	<div class="pagination">
+		{{ TOTAL_USERS }}
+		{{ pagination ? include('pagination.html') : '&bull; ' ~ PAGE_NUMBER }}
+	</div>
+</div>
+
+{% include 'overall_footer.html' %}

@@ -1,0 +1,12 @@
+imports:
+    - { resource: ../default/config.yml }
+
+parameters:
+    debug.load_time: true
+    debug.memory: true
+    debug.sql_explain: true
+    debug.show_errors: true
+    debug.exceptions: true
+    twig.debug: false
+    twig.auto_reload: false
+    twig.enable_debug_extension: false

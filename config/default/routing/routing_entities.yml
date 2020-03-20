@@ -1,0 +1,11 @@
+phpbb_group_view:
+    path: /group/{key}/{page}
+    controller: group.controller:view
+    requirements:
+        page: \d+
+    defaults:
+        page: 1
+
+phpbb_user_view:
+    path: /user/{key}
+    controller: user.controller:view
