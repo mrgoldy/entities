@@ -1,27 +1,11 @@
-services:
-    user.controller:
-        class: phpbb\user\controller\user
-        autowire: true
-
-    user.decorator:
-        class: phpbb\efw\decorator\user
-        parent: efw.decorator
-        autowire: true
-        tags: [{ name: efw.decorator }]
-
-    user.repository:
-        class: phpbb\efw\repository\user
-        parent: efw.repository
-        tags: [{ name: efw.repository }]
-
-parameters:
-    entity.user:
+entities:
+    user:
         alias: u
         table: users
         entity: \phpbb\efw\entity\user
         columns:
             user_id: 0
-            user_type: !php/const USER_NORMAL # phpbb\user\user_interface::NORMAL
+            user_type: !php/const phpbb\efw\entity\user::NORMAL
             group_id: 3
             user_permissions: ''
             user_perm_from: 0

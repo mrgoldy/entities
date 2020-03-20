@@ -19,6 +19,15 @@ namespace phpbb\efw\entity;
 class group extends entity
 {
 	/**
+	 * Group types.
+	 */
+	const OPEN		= 0;
+	const CLOSED	= 1;
+	const HIDDEN	= 2;
+	const SPECIAL	= 3;
+	const FREE		= 4;
+
+	/**
 	 * @var string Id column
 	 * @static
 	 */

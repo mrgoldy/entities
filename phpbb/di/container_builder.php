@@ -169,6 +169,7 @@ class container_builder
 			{
 				$this->container_extensions = [
 					new extension\core($this->get_config_path()),
+					new extension\entities($this->get_config_path()),
 				];
 
 				if ($this->use_extensions)
@@ -177,7 +178,6 @@ class container_builder
 				}
 
 				// Add tables extension after all extensions
-				$this->container_extensions[] = new extension\entities();
 				$this->container_extensions[] = new extension\tables();
 
 				// Inject the config
@@ -204,6 +204,7 @@ class container_builder
 
 				$loader     = new YamlFileLoader($this->container, new FileLocator(filesystem_helper::realpath($this->get_config_path())));
 				$loader->load($this->container->getParameter('core.environment') . '/config.yml');
+				$loader->load($this->container->getParameter('core.environment') . '/container/entities.yml');
 
 				$this->inject_custom_parameters();
 

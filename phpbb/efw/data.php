@@ -49,6 +49,33 @@ final class data extends \ArrayObject
 	}
 
 	/**
+	 * Offset exists.
+	 *
+	 * @param mixed $key
+	 * @return bool
+	 */
+	public function offsetExists($key): bool
+	{
+		return parent::offsetExists($key) || isset(self::$map[$key]);
+	}
+
+	/**
+	 * Offset get.
+	 *
+	 * @param mixed $key
+	 * @return mixed
+	 */
+	public function offsetGet($key)
+	{
+		if (!parent::offsetExists($key) && isset(self::$map[$key]))
+		{
+			return self::$map[$key]['default'];
+		}
+
+		return parent::offsetGet($key);
+	}
+
+	/**
 	 * Offset set.
 	 *
 	 * @param mixed $key

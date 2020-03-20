@@ -13,12 +13,14 @@
 
 namespace phpbb\efw\repository;
 
+use Doctrine\DBAL\Query\QueryBuilder;
+
 /**
- * Group.
+ * Group repository.
  */
 class group extends abstract_repository
 {
-	/** @var */
+	/** @var \phpbb\user */
 	protected $user;
 
 	/**
@@ -45,9 +47,9 @@ class group extends abstract_repository
 	/**
 	 * Get builder.
 	 *
-	 * @return \Doctrine\DBAL\Query\QueryBuilder
+	 * @return QueryBuilder
 	 */
-	public function get_builder()
+	public function get_builder(): QueryBuilder
 	{
 		return parent::get_builder()
 			->select($this->get_table_column('*'), 'ug.group_leader', 'ug.user_pending')

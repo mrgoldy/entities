@@ -119,16 +119,16 @@ abstract class abstract_repository implements repository_interface
 	 */
 	public function find_one(QueryBuilder $builder)
 	{
-		return $this->load($builder->setMaxResults(1))->get_last()->first();
+		return $this->find($builder->setMaxResults(1))->first();
 	}
 
 	/**
 	 * Build.
 	 *
 	 * @param QueryBuilder $builder
-	 * @param array|null   $orderBy
-	 * @param int|null     $limit
-	 * @param int|null     $offset
+	 * @param array        $orderBy
+	 * @param int          $limit
+	 * @param int          $offset
 	 * @return QueryBuilder
 	 */
 	public function build(QueryBuilder $builder, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): QueryBuilder
@@ -197,15 +197,13 @@ abstract class abstract_repository implements repository_interface
 		return $this->builder = $builder;
 	}
 
-	# Find by criteria
-
 	/**
 	 * Build by.
 	 *
-	 * @param array      $criteria
-	 * @param array|null $orderBy
-	 * @param int|null   $limit
-	 * @param int|null   $offset
+	 * @param array $criteria
+	 * @param array $orderBy
+	 * @param int   $limit
+	 * @param int   $offset
 	 * @return QueryBuilder
 	 */
 	public function build_by(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): QueryBuilder
@@ -213,12 +211,10 @@ abstract class abstract_repository implements repository_interface
 		return $this->builder = $this->build($this->build_criteria($this->get_builder(), $criteria), $orderBy, $limit, $offset);
 	}
 
-	# Find all entities
-
 	/**
 	 * Build all.
 	 *
-	 * @param array|null $orderBy
+	 * @param array $orderBy
 	 * @return QueryBuilder
 	 */
 	public function build_all(?array $orderBy = null): QueryBuilder
@@ -226,15 +222,13 @@ abstract class abstract_repository implements repository_interface
 		return $this->build_by([], $orderBy);
 	}
 
-	# Find by identifiers
-
 	/**
 	 * Build by id.
 	 *
-	 * @param array      $ids
-	 * @param array|null $orderBy
-	 * @param int|null   $limit
-	 * @param int|null   $offset
+	 * @param array $ids
+	 * @param array $orderBy
+	 * @param int   $limit
+	 * @param int   $offset
 	 * @return QueryBuilder
 	 */
 	public function build_by_id(array $ids, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): QueryBuilder
@@ -244,33 +238,40 @@ abstract class abstract_repository implements repository_interface
 		], $orderBy, $limit, $offset);
 	}
 
-	# Find by slugs
-
 	/**
 	 * Build by slug.
 	 *
-	 * @param array      $slugs
-	 * @param array|null $orderBy
-	 * @param int|null   $limit
-	 * @param int|null   $offset
+	 * @param array $slugs
+	 * @param array $orderBy
+	 * @param int   $limit
+	 * @param int   $offset
 	 * @return QueryBuilder
 	 */
 	public function build_by_slug(array $slugs, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): QueryBuilder
 	{
+		try
+		{
+			$column = $this->conn->getDatabasePlatform()->getLowerExpression($this->get_table_column($this->entity::get_slug_column()));
+		}
+		catch (DBALException $e)
+		{
+			$column = $this->get_table_column($this->entity::get_slug_column());
+		}
+
 		return $this->build_by([
-			$this->get_table_column($this->entity::get_slug_column()) => array_map('strval', $slugs),
+			$column => array_map(function($slug) {
+				return (string) strtolower($slug);
+			}, $slugs),
 		], $orderBy, $limit, $offset);
 	}
-
-	# Find by parent identifiers
 
 	/**
 	 * Build by parent.
 	 *
-	 * @param array      $parents
-	 * @param array|null $orderBy
-	 * @param int|null   $limit
-	 * @param int|null   $offset
+	 * @param array $parents
+	 * @param array $orderBy
+	 * @param int   $limit
+	 * @param int   $offset
 	 * @return QueryBuilder
 	 */
 	public function build_by_parent(array $parents, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): QueryBuilder
@@ -285,8 +286,6 @@ abstract class abstract_repository implements repository_interface
 		], $orderBy, $limit, $offset);
 	}
 
-	# Find one by criteria
-
 	/**
 	 * Build one by.
 	 *
@@ -297,8 +296,6 @@ abstract class abstract_repository implements repository_interface
 	{
 		return $this->build_by($criteria, null, 1);
 	}
-
-	# Find one by key
 
 	/**
 	 * Build one by key.
@@ -316,8 +313,6 @@ abstract class abstract_repository implements repository_interface
 		return $this->build_one_by_slug((string) $key);
 	}
 
-	# Find one by identifier
-
 	/**
 	 * Build one by id.
 	 *
@@ -329,8 +324,6 @@ abstract class abstract_repository implements repository_interface
 		return $this->build_one_by([$this->get_table_column($this->entity::get_id_column()) => $id]);
 	}
 
-	# Find one by slug
-
 	/**
 	 * Build one by slug.
 	 *
@@ -339,16 +332,23 @@ abstract class abstract_repository implements repository_interface
 	 */
 	public function build_one_by_slug(string $slug): QueryBuilder
 	{
-		return $this->build_one_by([$this->get_table_column($this->entity::get_slug_column()) => $slug]);
-	}
+		try
+		{
+			$column = $this->conn->getDatabasePlatform()->getLowerExpression($this->get_table_column($this->entity::get_slug_column()));
+		}
+		catch (DBALException $e)
+		{
+			$column = $this->get_table_column($this->entity::get_slug_column());
+		}
 
-	# Find one by parent identifier
+		return $this->build_one_by([$column => strtolower($slug)]);
+	}
 
 	/**
 	 * Build one by parent.
 	 *
-	 * @param int        $parent
-	 * @param array|null $orderBy
+	 * @param int   $parent
+	 * @param array $orderBy
 	 * @return QueryBuilder
 	 */
 	public function build_one_by_parent(int $parent, ?array $orderBy = null): QueryBuilder
@@ -361,8 +361,6 @@ abstract class abstract_repository implements repository_interface
 		return $this->build_by([$this->get_table_column($this->entity::get_parent_column()) => $parent], $orderBy, 1);
 	}
 
-	# Get all entities
-
 	/**
 	 * Get all.
 	 *
@@ -373,8 +371,6 @@ abstract class abstract_repository implements repository_interface
 		return $this->entities;
 	}
 
-	# Get all loaded
-
 	/**
 	 * Get last.
 	 *
@@ -384,8 +380,6 @@ abstract class abstract_repository implements repository_interface
 	{
 		return $this->loaded;
 	}
-
-	# Get by criteria
 
 	/**
 	 * Get by.
@@ -424,8 +418,6 @@ abstract class abstract_repository implements repository_interface
 		return $this->entities->offsetGet($key);
 	}
 
-	# Get by identifier
-
 	/**
 	 * Get by id.
 	 *
@@ -437,8 +429,6 @@ abstract class abstract_repository implements repository_interface
 		return $this->get_by([$this->entity::get_id_column() => array_map('intval', $ids)]);
 	}
 
-	# Get by slug
-
 	/**
 	 * Get by slug.
 	 *
@@ -447,10 +437,10 @@ abstract class abstract_repository implements repository_interface
 	 */
 	public function get_by_slug(array $slugs): collection
 	{
-		return $this->get_by([$this->entity::get_id_column() => array_map('strval', $slugs)]);
+		return $this->get_by([$this->entity::get_id_column() => array_map(function($slug) {
+			return (string) strtolower($slug);
+		}, $slugs)]);
 	}
-
-	# Get by parent identifiers
 
 	/**
 	 * Get by parents.
@@ -475,8 +465,6 @@ abstract class abstract_repository implements repository_interface
 
 		return $parents;
 	}
-
-	# Load by criteria
 
 	/**
 	 * Load.
@@ -503,7 +491,6 @@ abstract class abstract_repository implements repository_interface
 
 		return $this;
 	}
-	# Load one by criteria
 
 	/**
 	 * Load one.
@@ -511,15 +498,15 @@ abstract class abstract_repository implements repository_interface
 	 * @param QueryBuilder $builder
 	 * @return repository_interface
 	 */
-	public function load_one(QueryBuilder $builder)
+	public function load_one(QueryBuilder $builder): repository_interface
 	{
 		return $this->load($builder->setMaxResults(1));
 	}
 
 	/**
-	 * Count.
+	 * Count entities.
 	 *
-	 * @param QueryBuilder|null $builder
+	 * @param QueryBuilder $builder
 	 * @return int
 	 */
 	public function count(QueryBuilder $builder = null): int
@@ -534,7 +521,7 @@ abstract class abstract_repository implements repository_interface
 	}
 
 	/**
-	 * Clear.
+	 * Clear entities.
 	 *
 	 * @return repository_interface
 	 */
@@ -547,7 +534,7 @@ abstract class abstract_repository implements repository_interface
 	}
 
 	/**
-	 * Has.
+	 * Has entity.
 	 *
 	 * @param $key
 	 * @return bool
@@ -585,12 +572,12 @@ abstract class abstract_repository implements repository_interface
 	}
 
 	/**
-	 * Set.
+	 * Set entities.
 	 *
-	 * @param array $entities
+	 * @param entity[] $entities
 	 * @return repository_interface
 	 */
-	public function set(array $entities)
+	public function set(array $entities): repository_interface
 	{
 		foreach ($entities as $entity)
 		{
@@ -604,7 +591,7 @@ abstract class abstract_repository implements repository_interface
 	}
 
 	/**
-	 * Set one.
+	 * Set one entity.
 	 *
 	 * @param entity $entity
 	 * @return repository_interface
@@ -617,9 +604,9 @@ abstract class abstract_repository implements repository_interface
 	}
 
 	/**
-	 * Unset.
+	 * Unset entities.
 	 *
-	 * @param array $entities
+	 * @param entity[] $entities
 	 * @return repository_interface
 	 */
 	public function unset(array $entities): repository_interface
@@ -636,7 +623,7 @@ abstract class abstract_repository implements repository_interface
 	}
 
 	/**
-	 * Unset one.
+	 * Unset one entity.
 	 *
 	 * @param entity $entity
 	 * @return repository_interface
@@ -650,7 +637,7 @@ abstract class abstract_repository implements repository_interface
 	}
 
 	/**
-	 * Create.
+	 * Create entity.
 	 *
 	 * @return entity
 	 */
@@ -660,7 +647,7 @@ abstract class abstract_repository implements repository_interface
 	}
 
 	/**
-	 * Delete.
+	 * Delete entity.
 	 *
 	 * @param entity $entity
 	 * @return bool
@@ -690,7 +677,7 @@ abstract class abstract_repository implements repository_interface
 	}
 
 	/**
-	 * Insert.
+	 * Insert entity.
 	 *
 	 * @param entity $entity
 	 * @return entity
@@ -718,7 +705,7 @@ abstract class abstract_repository implements repository_interface
 	}
 
 	/**
-	 * Update.
+	 * Update entity.
 	 *
 	 * @param entity $entity
 	 * @return entity

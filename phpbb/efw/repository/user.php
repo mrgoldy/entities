@@ -13,21 +13,13 @@
 
 namespace phpbb\efw\repository;
 
+use Doctrine\DBAL\Query\QueryBuilder;
+
 /**
- * User.
+ * User repository.
  */
 class user extends abstract_repository
 {
-	/**
-	 * Get entity class.
-	 *
-	 * @return string
-	 */
-	public function get_entity_class(): string
-	{
-		return '\\phpbb\\efw\\entity\\user';
-	}
-
 	/**
 	 * Get entity map.
 	 *
@@ -39,25 +31,15 @@ class user extends abstract_repository
 	}
 
 	/**
-	 * Get table name.
-	 *
-	 * @return string
-	 */
-	public function get_table_name(): string
-	{
-		return 'users';
-	}
-
-	/**
 	 * Build by group.
 	 *
-	 * @param int        $group_id
-	 * @param array|null $orderBy
-	 * @param int|null   $limit
-	 * @param int|null   $offset
-	 * @return \Doctrine\DBAL\Query\QueryBuilder
+	 * @param int   $group_id
+	 * @param array $orderBy
+	 * @param int   $limit
+	 * @param int   $offset
+	 * @return QueryBuilder
 	 */
-	public function build_by_group(int $group_id, ?array $orderBy = null, ?int $limit = null, ?int $offset = null)
+	public function build_by_group(int $group_id, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): QueryBuilder
 	{
 		$builder = $this->get_builder()
 			->select($this->get_table_column('*'), 'ug.group_leader', 'ug.user_pending')

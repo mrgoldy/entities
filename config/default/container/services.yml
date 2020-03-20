@@ -7,6 +7,7 @@ imports:
     - { resource: services_content.yml }
     - { resource: services_cron.yml }
     - { resource: services_db.yml }
+    - { resource: services_efw.yml }
     - { resource: services_event.yml }
     - { resource: services_extensions.yml }
     - { resource: services_feed.yml }
@@ -32,7 +33,6 @@ imports:
     - { resource: services_ucp.yml }
     - { resource: services_user.yml }
 
-    - { resource: entities/* }
     - { resource: tables.yml }
     - { resource: parameters.yml }
 

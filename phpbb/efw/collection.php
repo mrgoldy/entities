@@ -13,16 +13,18 @@
 
 namespace phpbb\efw;
 
+use phpbb\efw\entity\entity;
+
 /**
  * Entity collection.
  */
 final class collection extends \ArrayIterator
 {
-	/** @var */
+	/** @var array Slug map */
 	protected $map;
 
 	/**
-	 * OffsetNotExists.
+	 * Offset not exists.
 	 *
 	 * @param $key
 	 * @return bool
@@ -33,7 +35,7 @@ final class collection extends \ArrayIterator
 	}
 
 	/**
-	 * OffsetExists.
+	 * Offset exists.
 	 *
 	 * @param string $key
 	 * @return bool
@@ -44,7 +46,7 @@ final class collection extends \ArrayIterator
 	}
 
 	/**
-	 * OffsetGet.
+	 * Offset get.
 	 *
 	 * @param string $key
 	 * @return mixed
@@ -55,15 +57,15 @@ final class collection extends \ArrayIterator
 	}
 
 	/**
-	 * OffsetSet.
+	 * Offset set.
 	 *
 	 * @param string $key
-	 * @param \phpbb\efw\entity\entity $entity
+	 * @param entity $entity
 	 * @return void
 	 */
 	public function offsetSet($key, $entity)
 	{
-		if ($entity instanceof entity\entity)
+		if ($entity instanceof entity)
 		{
 			parent::offsetSet($entity->get_id(), $entity);
 
@@ -75,7 +77,7 @@ final class collection extends \ArrayIterator
 	}
 
 	/**
-	 * OffsetUnset.
+	 * Offset unset.
 	 *
 	 * @param string $key
 	 * @return void
@@ -98,7 +100,7 @@ final class collection extends \ArrayIterator
 	}
 
 	/**
-	 * VerifyKey.
+	 * Verify key.
 	 *
 	 * @param $key
 	 * @return mixed
@@ -114,22 +116,32 @@ final class collection extends \ArrayIterator
 	}
 
 	/**
-	 * First.
+	 * Get first entity.
 	 *
 	 * @return mixed
 	 */
 	public function first()
 	{
+		if (self::count() === 0)
+		{
+			return null;
+		}
+
 		return reset($this);
 	}
 
 	/**
-	 * Last.
+	 * Get last entity.
 	 *
 	 * @return mixed
 	 */
 	public function last()
 	{
+		if (self::count() === 0)
+		{
+			return null;
+		}
+
 		return end($this);
 	}
 }

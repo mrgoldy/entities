@@ -72,6 +72,11 @@ abstract class abstract_decorator implements decorator_interface
 	{
 		$variables = [];
 
+		if (is_object($class))
+		{
+			$class = get_class($class);
+		}
+
 		if (!empty($class) && substr($class, -2) !== '::')
 		{
 			$class .= '::';

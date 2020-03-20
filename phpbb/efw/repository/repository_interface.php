@@ -248,25 +248,25 @@ interface repository_interface
 	 * @param QueryBuilder $builder
 	 * @return repository_interface
 	 */
-	public function load_one(QueryBuilder $builder);
+	public function load_one(QueryBuilder $builder): repository_interface;
 
 	/**
-	 * Count.
+	 * Count entities.
 	 *
-	 * @param QueryBuilder|null $builder
+	 * @param QueryBuilder $builder
 	 * @return int
 	 */
 	public function count(QueryBuilder $builder = null): int;
 
 	/**
-	 * Clear.
+	 * Clear entities.
 	 *
 	 * @return repository_interface
 	 */
 	public function clear(): repository_interface;
 
 	/**
-	 * Has.
+	 * Has entity.
 	 *
 	 * @param $key
 	 * @return bool
@@ -290,15 +290,15 @@ interface repository_interface
 	public function import_one(array $row): repository_interface;
 
 	/**
-	 * Set.
+	 * Set entities.
 	 *
-	 * @param array $entities
+	 * @param entity[] $entities
 	 * @return repository_interface
 	 */
-	public function set(array $entities);
+	public function set(array $entities): repository_interface;
 
 	/**
-	 * Set one.
+	 * Set one entity.
 	 *
 	 * @param entity $entity
 	 * @return repository_interface
@@ -306,15 +306,15 @@ interface repository_interface
 	public function set_one(entity $entity): repository_interface;
 
 	/**
-	 * Unset.
+	 * Unset entities.
 	 *
-	 * @param array $entities
+	 * @param entity[] $entities
 	 * @return repository_interface
 	 */
 	public function unset(array $entities): repository_interface;
 
 	/**
-	 * Unset one.
+	 * Unset one entity.
 	 *
 	 * @param entity $entity
 	 * @return repository_interface
@@ -322,14 +322,14 @@ interface repository_interface
 	public function unset_one(entity $entity): repository_interface;
 
 	/**
-	 * Create.
+	 * Create entity.
 	 *
 	 * @return entity
 	 */
 	public function create(): entity;
 
 	/**
-	 * Delete.
+	 * Delete entity.
 	 *
 	 * @param entity $entity
 	 * @return bool
@@ -337,7 +337,7 @@ interface repository_interface
 	public function delete(entity $entity): bool;
 
 	/**
-	 * Insert.
+	 * Insert entity.
 	 *
 	 * @param entity $entity
 	 * @return entity
@@ -345,7 +345,7 @@ interface repository_interface
 	public function insert(entity $entity): entity;
 
 	/**
-	 * Update.
+	 * Update entity.
 	 *
 	 * @param entity $entity
 	 * @return entity

@@ -41,7 +41,7 @@ class group extends abstract_decorator
 	}
 
 	/**
-	 * X
+	 * Get group variables
 	 *
 	 * @param \phpbb\efw\entity\group $entity
 	 * @return array
@@ -75,7 +75,7 @@ class group extends abstract_decorator
 			$common,
 			$this->get_text_variables('GROUP_DESC', $entity->get('group_desc')),
 			$this->get_rank_variables('GROUP_RANK', $this->group_helper->get_rank($data), $entity->get('group_rank')),
-			$this->get_const_variables('S', $entity->get('group_type'), ['GROUP_OPEN', 'GROUP_CLOSED', 'GROUP_HIDDEN', 'GROUP_SPECIAL', 'GROUP_FREE']), // @todo
+			$this->get_const_variables('S_GROUP', $entity->get('group_type'), ['OPEN', 'CLOSED', 'HIDDEN', 'SPECIAL', 'FREE'], $entity),
 			$this->get_link_variables('GROUP', 'phpbb_group_view', ['key' => $entity->get_id()])
 		);
 

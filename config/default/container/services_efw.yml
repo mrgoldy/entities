@@ -1,0 +1,87 @@
+services:
+    # DBAL
+    doctrine:
+        synthetic: true
+
+    # Base
+    efw.decorator:
+        class: phpbb\efw\decorator\abstract_decorator
+        abstract: true
+        arguments:
+            - '@controller.helper'
+            - '@text_formatter.renderer'
+            - '@text_formatter.utils'
+            - '@user'
+
+    efw.entity:
+        class: phpbb\efw\entity\entity
+
+    efw.repository:
+        class: phpbb\efw\repository\abstract_repository
+        abstract: true
+        arguments:
+            - '@doctrine'
+            - '%entities%'
+            - '%tables%'
+
+    efw.provider:
+        class: phpbb\efw\provider
+        public: true
+        arguments:
+            - '@efw.decorator_collection'
+            - '@efw.repository_collection'
+
+    efw.decorator_collection:
+        class: phpbb\di\service_collection
+        arguments: ['@service_container']
+        tags: [{ name: service_collection, tag: efw.decorator }]
+
+    efw.repository_collection:
+        class: phpbb\di\service_collection
+        arguments: ['@service_container']
+        tags: [{ name: service_collection, tag: efw.repository }]
+
+    # Group
+    group.controller:
+        class: phpbb\group\controller\group
+        autowire: true
+
+    group.decorator:
+        class: phpbb\efw\decorator\group
+        autowire: true
+        tags: [{ name: efw.decorator }]
+
+    group.repository:
+        class: phpbb\efw\repository\group
+        parent: efw.repository
+        autowire: true
+        calls: [['set_user', ['@user']]]
+        tags: [{ name: efw.repository }]
+
+    # User
+    user.controller:
+        class: phpbb\user\controller\user
+        autowire: true
+
+    user.decorator:
+        class: phpbb\efw\decorator\user
+        parent: efw.decorator
+        autowire: true
+        tags: [{ name: efw.decorator }]
+
+    user.repository:
+        class: phpbb\efw\repository\user
+        parent: efw.repository
+        tags: [{ name: efw.repository }]
+
+    # Misc
+    markdown.engine:
+        class: Aptoma\Twig\Extension\MarkdownEngine\MichelfMarkdownEngine
+    twig.markdown:
+        class: Aptoma\Twig\Extension\MarkdownExtension
+        arguments: ['@markdown.engine']
+        tags: [{ name: twig.extension }]
+
+    phpbb.index.controller:
+        class: phpbb\efw\index
+        autowire: true

@@ -1,6 +1,0 @@
-services:
-    _defaults:
-        autowire: true
-
-    phpbb.index.controller:
-        class: phpbb\efw\index

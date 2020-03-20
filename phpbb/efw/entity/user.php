@@ -19,6 +19,22 @@ namespace phpbb\efw\entity;
 class user extends entity
 {
 	/**
+	 * User types.
+	 */
+	const NORMAL	= 0;
+	const INACTIVE	= 1;
+	const IGNORE	= 2;
+	const FOUNDER	= 3;
+
+	/**
+	 * Inactive reasons.
+	 */
+	const INACTIVE_REGISTER	= 1; # Newly registered account
+	const INACTIVE_PROFILE	= 2; # Profile details changed
+	const INACTIVE_MANUAL	= 3; # Account deactivated by administrator
+	const INACTIVE_REMIND	= 4; # Forced user account reactivation
+
+	/**
 	 * @var string Id column
 	 * @static
 	 */

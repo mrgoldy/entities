@@ -1,29 +1,11 @@
-services:
-    _defaults:
-        autowire: true
-
-    group.controller:
-        class: phpbb\group\controller\group
-
-    group.decorator:
-        class: phpbb\efw\decorator\group
-        tags: [{ name: efw.decorator }]
-
-    group.repository:
-        class: phpbb\efw\repository\group
-        parent: efw.repository
-        autowire: true
-        calls: [['set_user', ['@user']]]
-        tags: [{ name: efw.repository }]
-
-parameters:
-    entity.group:
+entities:
+    group:
         alias: g
         table: groups
         entity: \phpbb\efw\entity\group
         columns:
             group_id: 0
-            group_type: !php/const GROUP_CLOSED #\phpbb\group\group_interface::CLOSED
+            group_type: !php/const phpbb\efw\entity\group::CLOSED
             group_founder_manage: false
             group_skip_auth: false
             group_name: ''

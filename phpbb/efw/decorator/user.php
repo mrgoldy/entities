@@ -13,8 +13,6 @@
 
 namespace phpbb\efw\decorator;
 
-use phpbb\efw\entity\entity;
-
 class user extends abstract_decorator
 {
 	/**
@@ -75,9 +73,9 @@ class user extends abstract_decorator
 			$this->get_date_variables('USER_LAST_SEARCH', $entity->get('user_last_search')),
 			$this->get_date_variables('USER_LAST_VISIT', $entity->get('user_lastvisit')),
 			$this->get_date_variables('USER_LAST_WARNING', $entity->get('user_last_warning')),
-			$this->get_date_variables('USER_INACTIVE_TIME', $entity->get('user_inactive_time'))
-	#		$this->get_const_variables('S_USER', $entity->get('user_inactive_reason'), ['INACTIVE_REGISTER', 'INACTIVE_PROFILE', 'INACTIVE_MANUAL', 'INACTIVE_REWIND'], user_interface::class),
-	#		$this->get_const_variables('S_USER', $entity->get('user_type'), ['FOUNDER', 'IGNORE', 'INACTIVE', 'NORMAL'], user_interface::class)
+			$this->get_date_variables('USER_INACTIVE_TIME', $entity->get('user_inactive_time')),
+			$this->get_const_variables('S_USER', $entity->get('user_inactive_reason'), ['INACTIVE_REGISTER', 'INACTIVE_PROFILE', 'INACTIVE_MANUAL', 'INACTIVE_REMIND'], $entity),
+			$this->get_const_variables('S_USER', $entity->get('user_type'), ['FOUNDER', 'IGNORE', 'INACTIVE', 'NORMAL'], $entity)
 		);
 
 		return $variables;
