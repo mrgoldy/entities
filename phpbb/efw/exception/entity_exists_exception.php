@@ -13,6 +13,7 @@
 
 namespace phpbb\efw\exception;
 
+use phpbb\efw\entity\entity;
 use phpbb\exception\exception_interface;
 use phpbb\exception\http_exception;
 
@@ -21,37 +22,13 @@ use phpbb\exception\http_exception;
  */
 class entity_exists_exception extends http_exception implements exception_interface
 {
-	/**
-	 * Entity already exists.
-	 *
-	 * @param int             $status_code
-	 * @param string          $message
-	 * @param array           $parameters
-	 * @param \Exception|null $previous
-	 * @param array           $headers
-	 * @param int             $code
-	 * @return entity_exists_exception
-	 * @static
-	 */
-	static public function already_exists(int $status_code = 409, string $message = '', array $parameters = [], \Exception $previous = null, array $headers = [], int $code = 0)
+	static public function already_exists(entity $entity): entity_exists_exception
 	{
-		return new self($status_code, $message, $parameters, $previous, $headers, $code);
+		return new self(409, 'Entity already exists', [$entity->get_id()]);
 	}
 
-	/**
-	 * Entity does not exist.
-	 *
-	 * @param int             $status_code
-	 * @param string          $message
-	 * @param array           $parameters
-	 * @param \Exception|null $previous
-	 * @param array           $headers
-	 * @param int             $code
-	 * @return entity_exists_exception
-	 * @static
-	 */
-	static public function not_exists(int $status_code = 409, string $message = '', array $parameters = [], \Exception $previous = null, array $headers = [], int $code = 0)
+	static public function not_exists(entity $entity): entity_exists_exception
 	{
-		return new self($status_code, $message, $parameters, $previous, $headers, $code);
+		return new self(409, 'Entity does not exist', [$entity->get_slug(), get_class($entity)]);
 	}
 }

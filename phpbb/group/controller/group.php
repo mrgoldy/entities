@@ -63,10 +63,8 @@ class group
 		/** @var \phpbb\efw\repository\user $user_repo */
 		$user_repo	= $this->ep->get_repository('user');
 		$user_deco	= $this->ep->get_decorator('user');
-		$user_qb	= $user_repo->build_by_group($group->get_id(), [
-			'group_leader'		=> 'DESC',
-			'username_clean'	=> 'ASC',
-		], $limit, $start);
+		$user_sort	= $this->ep->get_sorter('user_group');
+		$user_qb	= $user_repo->build_by_group($group->get_id(), $user_sort->get_order_by(), $limit, $start);
 
 		$users = $user_repo->find($user_qb);
 		$total = $user_repo->count($user_qb);

@@ -656,7 +656,7 @@ abstract class abstract_repository implements repository_interface
 	{
 		if (empty($entity->get_id()))
 		{
-			throw entity_exists_exception::not_exists();
+			throw entity_exists_exception::not_exists($entity);
 		}
 
 		try
@@ -686,7 +686,7 @@ abstract class abstract_repository implements repository_interface
 	{
 		if (!empty($entity->get_id()))
 		{
-			throw entity_exists_exception::already_exists();
+			throw entity_exists_exception::already_exists($entity);
 		}
 
 		$this->conn->createQueryBuilder()
@@ -714,7 +714,7 @@ abstract class abstract_repository implements repository_interface
 	{
 		if (empty($entity->get_id()))
 		{
-			throw entity_exists_exception::not_exists();
+			throw entity_exists_exception::not_exists($entity);
 		}
 
 		$builder = $this->conn->createQueryBuilder();
